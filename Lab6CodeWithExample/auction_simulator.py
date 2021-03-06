@@ -142,7 +142,9 @@ class Auction:
         else:
             print(
                 f"\nThe winner of the auction is: {self._auctioneer.highest_bidder}\n")
-        summary = {bidder.name: bidder.highest_bid for bidder in self._bidder_list}
+            # using dictionary comprehension to check if someone actually bid, if not,
+            # do not display the bid in the summary
+        summary = {bidder.name: bidder.highest_bid for bidder in self._bidder_list if bidder.highest_bid > 0}
         for name, high in summary.items():
             print(f"Bidder: {name}\t Highest Bid: ${high}")
 
@@ -158,8 +160,8 @@ def main():
     bidders.append(Bidder("Kewei", 800, random.random(), 1.9))
     bidders.append(Bidder("Scott", 4000, random.random(), 2))
 
-    # item = input("What is the item that is being auctioned?")
-    # price = input("What is the starting price?")
+    item = input("What is the item that is being auctioned?")
+    price = input("What is the starting price?")
     #
     # default = input("Do you want default bidders or to create your own? (y/n)")
     #
@@ -171,20 +173,22 @@ def main():
     #     bidders.append(Bidder("Scott", 4000, random.random(), 2))
     #     create_user = False
     # elif default == 'n':
-    #     create_user = True
+    # create_user = True
     #
-    # while create_user:
-    #     name = input("What is the bidders name?")
-    #     budget = input("What is the bidders budget?")
-    #     incr = input("How much will the bidder increase the previous bid by?")
-    #     bidders.append(Bidder(name, float(budget), random.random(), float(incr)))
-    #     choice = input("Do you want to create another user? (y/n)")
-    #     if choice.__contains__('y'):
-    #         create_user = True
-    #     elif choice.__contains__('n'):
-    #         create_user = False
-    #     else:
-    #         print("Invalid entry, please enter y/n")
+    while create_user:
+        name = input("What is the bidders name?")
+        budget = input("What is the bidders budget?")
+        incr = input("How much will the bidder increase the previous bid by?")
+        bidders.append(Bidder(name, float(budget), random.random(), float(incr)))
+        create_user = False
+        choice = input("Do you want to create another user? (y/n)")
+        if choice.__contains__('y'):
+            create_user = True
+        elif choice.__contains__('n'):
+            create_user = False
+        else:
+            print("Invalid entry, please enter y/n")
+
     #
     #
     #
@@ -193,7 +197,7 @@ def main():
     print("\n\nStarting Auction!!")
     print("------------------")
     my_auction = Auction(bidders)
-    my_auction.simulate_auction("Rara", 100)
+    my_auction.simulate_auction(item, float(price))
 
 
 if __name__ == '__main__':
